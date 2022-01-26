@@ -5,33 +5,40 @@ const validateEmail = (email) => {
   return re.test(email)
 }
 
-const userSchema = new Schema({
-  username: {
-    type: string,
-    unique: true,
-    required: true,
-    trim: true
-  },
-  email: {
-    type: string,
-    unique: true,
-    required: true,
-    trim: true,
-    validate: [validateEmail, "Please enter a valid email address"],
-  },
-  thoughts: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Thought'
-    }
-  ],
-  friends: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
+const userSchema = new Schema(
+  {
+    username: {
+      type: String,
+      unique: true,
+      required: true,
+      trim: true
     },
-  ],
-});
+    email: {
+      type: String,
+      unique: true,
+      required: true,
+      trim: true,
+      validate: [validateEmail, "Please enter a valid email address"],
+    },
+    thoughts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Thought'
+      }
+    ],
+    friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+  },
+  {
+    toJSON: {
+      virtuals: true,
+    },
+  }
+);
 
 const User = model('User',userSchema);
 
