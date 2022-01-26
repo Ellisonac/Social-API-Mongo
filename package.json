@@ -1,0 +1,19 @@
+{
+  "name": "social-api-mongo",
+  "version": "1.0.0",
+  "description": "This server provides database connectivity to a social media application through Express+Mongoose.",
+  "main": "server.js",
+  "scripts": {
+    "test": "test",
+    "start": "npx nodemon server.js"
+  },
+  "author": "Andrew Ellison",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.2",
+    "mongoose": "^6.1.8"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
