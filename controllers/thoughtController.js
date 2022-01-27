@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Thought = require("../models/Thought");
+const Reaction = require("../models/Reaction")
 
 const getThoughts = (req, res) => {
   Thought.find()
@@ -20,10 +21,10 @@ const createThought = async (req, res) => {
     const thought = await Thought.create(req.body);
 
     // Push thought to associated user's thought list
-    const user = User.findOneAndUpdate(
-      { _id: req.body.userId },
-      { $push: { thoughts: thought._id } },
-      { new: true }
+    const user = await User.findOneAndUpdate(
+      { username: thought.username },
+      { $push: { "thoughts": thought._id } },
+      { safe: true, upsert: true }
     );
     
     if (!user) {
@@ -58,11 +59,12 @@ const deleteThought = async (req, res) => {
 
     if (!thought) {
       res.status(404).json({ message: "No thought found with that ID" });
+      return
     }
 
     // Remove thought from associated user
     await User.findOneAndUpdate(
-      { userId: thought.userId },
+      { username: thought.username },
       { $pull: { thought: thought._id }},
       );
 
@@ -90,7 +92,7 @@ const addReaction = (req, res) => {
 
 const deleteReaction = (req, res) => {
   Thought.findOneAndUpdate(
-    { _id: req.params.userId },
+    { _id: req.params.thoughtId },
     { $pull: { reactions: req.params.reactionId } }
   ).then((thought) => {
     !thought
