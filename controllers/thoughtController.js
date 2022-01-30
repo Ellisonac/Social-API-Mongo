@@ -102,7 +102,7 @@ const addReaction = async (req, res) => {
 const deleteReaction = (req, res) => {
   Thought.findOneAndUpdate(
     { _id: req.params.thoughtId },
-    { $pull: { reactions: req.params.reactionId } }
+    { $pull: { reactions: {_id: req.params.reactionId} } }
   ).then((thought) => {
     !thought
       ? res.status(404).json({ message: "No thought with that ID found" })
